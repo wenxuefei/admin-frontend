@@ -21,3 +21,18 @@ export function addUser(data) {
 	})
 }
 
+export function editStatus(data) {
+	return request({
+		url: 'editStatus',
+		method: 'post',
+		data: data
+	})
+}
+
+export function rePassword(data) {
+	return request({
+		url: 'rePassword',
+		method: 'post',
+		data: data
+	})
+}

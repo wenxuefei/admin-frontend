@@ -1,7 +1,6 @@
 <template>
 	<div class="user-container">
 		<div class="form-container">
-			<!-- :rules="adminRules" -->
 			<el-form ref="form" :model='admin' :rules="adminRules" label-width="80px" class="form-form" status-icon>
 				<el-row class="form-item">
 
@@ -103,12 +102,7 @@
 
 			return {
 				admin: {
-					username: '',
-					password: '',
-					confirm: '',
-					phone: '',
-					status: 1,
-					avatar: './avatars/20200119/FGDngaXsIqSXRbFWEkFNBRwh6CsXezNtKNrVX8Sk.png'
+					status:1
 				},
 				adminRules: {
 					username: [{
@@ -157,7 +151,7 @@
 					auffix === "jpg" ||
 					auffix === "png" ||
 					auffix === "gif"
-					
+
 				if (!extension) {
 					this.$message({
 						message: "上传图片只能是jpg / png / gif格式!",
@@ -223,32 +217,11 @@
 	.avatar-uploader .el-upload:hover {
 		border-color: #409EFF;
 	}
-
-	// .avatar {
-	// 	width: 178px;
-	// 	height: 178px;
-	// 	display: block;
-	// }
 </style>
 
 <style rel="stylesheet/scss" lang="scss">
 	.user-container {
-		padding: 5px;
-		color: #FFFFFF;
-		font-size: 14px;
-
 		.form-container {
-			width: 95%;
-			height: auto;
-			margin: 2.5%;
-			background: rgba($color: #FFFFFF, $alpha: 0.4);
-			border: 1px solid rgba(255, 255, 255, 0.1);
-			border-radius: 5px;
-			padding: 2.5% 1.5% 2.5%;
-
-			.action {
-				text-align: right;
-			}
 
 			.form-form {
 				width: 100%;

@@ -2,6 +2,10 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 Vue.use(Router)
+const routerPush = Router.prototype.push
+Router.prototype.push = function push(location) {
+	return routerPush.call(this, location).catch(error => error)
+}
 
 /* 后台布局 */
 
@@ -64,10 +68,27 @@ export const routerMap = [{
 		}, {
 			path: 'admin-add',
 			component: () => import('@/container/user/menu/add'),
-			name: 'role_index',
+			name: 'admin_index',
 			meta: {
 				title: '用户添加',
 				icon: 'user'
+			},
+			hidden: true,
+		},{
+			path: 'menu',
+			component: () => import('@/container/menus/index'),
+			name: 'menu_index',
+			meta: {
+				title: '菜单管理',
+				icon: 'el-icon-tickets'
+			}
+		},{
+			path: 'menu-add',
+			component: () => import('@/container/menus/modify/add'),
+			name: 'menu_add',
+			meta: {
+				title: '菜单添加',
+				icon: 'el-icon-tickets'
 			},
 			hidden: true,
 		}]

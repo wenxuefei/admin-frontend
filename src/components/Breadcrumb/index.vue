@@ -1,30 +1,24 @@
 <template>
 	<el-breadcrumb class="app-breadcurmb" seperator="/">
 		<transition-group name="breadcrumb">
-			<el-breadcrumb-item v-for="item in levelList" :key="item.path">
-				<span v-if="item.id < 3" class="redirect">{{item.title}}</span>
-				<span v-else class="no-redirect">{{item.title}}</span>
+			<el-breadcrumb-item v-for="(item,index) in levelList" :key="item.path">
+				<span v-if="item.redirect==='noredirect' || index==levelList.length - 1" class="no-redirect">{{item.meta.title}}</span>
+				<span v-else class="redirect" @click.prevent="handleLink(item)">{{item.meta.title}}</span>
 			</el-breadcrumb-item>
 		</transition-group>
 	</el-breadcrumb>
 </template>
 <script>
+	import PathToRegexp from 'path-to-regexp'
 	export default {
 		data() {
 			return {
-				levelList: [{
-					id: 1,
-					path: '222',
-					title: '首页'
-				}, {
-					id: 2,
-					path: '333',
-					title: '活动管理'
-				}, {
-					id: 3,
-					path: '555',
-					title: '活动列表'
-				}]
+				levelList: []
+			}
+		},
+		watch:{
+			$route(){
+				this.getBreadcrumb()
 			}
 		},
 		created() {
@@ -33,8 +27,32 @@
 		methods: {
 			getBreadcrumb() {
 				let matched = this.$route.matched.filter(item => item.name)
-
-				window.console.log(matched)
+				
+				const first = matched[0]
+				
+				if(first && first.name.trim().toLowerCase() !== 'Dashboard'.toLocaleLowerCase()){
+					matched = [{path:'/dashboard',meta:{title:'首页'}}].concat(matched)
+				}
+				
+				this.levelList = matched.filter(item=>item.meta && item.meta.title && item.meta.breadcrumb !== false)
+			},
+			
+			pathCompile(path){
+				const { params } = this.$route
+				let toPath = PathToRegexp.compile(path)
+				
+				return toPath(params)
+			},
+			
+			handleLink(item){
+				const {redirect,path} = item
+				
+				if(redirect){
+					this.$router.push(redirect)
+					return
+				}
+				
+				this.$router.push(this.pathCompile(path))
 			}
 		}
 	}
@@ -49,12 +67,14 @@
 
 		.redirect {
 			color: #fff;
-			// color: #22C2C2;
 			font-weight: bold;
+			
+			&:hover{
+				color: #ffd04b;
+			}
 		}
 
 		.no-redirect {
-			// color: #97a8be;
 			color: #22C2C2;
 			cursor: text;
 		}
